@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="3D Gaussian Splats from unposed images using ray diffusion">
+  <meta name="keywords" content="Diffusion, Gaussian Splatting, 3D Reconstruction">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3DiffGS: 3D Gaussian Splats from Unposed Images using Ray Diffusion</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">3DiffGS: 3D Gaussian Splats from Unposed Images using Ray Diffusion</h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://abhigyan7.github.io">Abhigyan Bhusal</a><sup>1,2</sup>,</span>
+
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/bishad-koju/">Bishad Koju</a><sup>2</sup>,</span>
+
+            <span class="author-block">
+              <a href="https://insait.ai/dr-danda-paudel/">Danda Pani Paudel</a><sup>1,2,3</sup>,
+            </span>
+
+            <span class="author-block">
+              <a href="https://frameau.xyz/">François Rameau</a><sup>1,4</sup>,
+            </span>
+
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>NAAMII,</span>
+            <span class="author-block"><sup>2</sup>NHU AI,</span>
+            <span class="author-block"><sup>3</sup>INSAIT,</span>
+            <span class="author-block"><sup>4</sup>SUNY Korea</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="./static/documents/paper.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!--
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>-->
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MXjo0Qu_qbE"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/abhigyan7/3DiffGS"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="teaser" height="100%" src='./static/images/teaser.png' />
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">3DiffGS</span> jointly denoises camera rays and regresses 3DGS,
+        and optimizes for better consistency between these two outputs.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- 
+  --<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" nonoautoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" nonoautoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+          Recent feed-forward 3D reconstruction methods suffer from (1) a critical supervision bottleneck of requiring expensive 3D data and (2) limited generalization. Our experi- ments demonstrate that diffusion models yield significantly better generalization; how- ever, such methods exist only for camera pose estimation – not for 3D reconstruction. To enable better generalization and 3D-free training, we introduce 3DiffGS, a camera ray diffusion model that also predicts 3D geometry. Unlike diffusion methods that focus entirely on camera estimation (e.g., PoseDiffusion and RayDiffusion) or depend on ex- plicit 3D data (e.g., DiffusionSfM), 3DiffGS performs diffusion directly in ray space and decodes 3D Gaussian Splats from the same ray features, naturally unifying camera and scene structure prediction. This also enables training without 3D, using only 2D images via re-rendering.
+          </p>
+          
+          <p>
+          However, we observed that a trivial way of decoding Gaussians and denoised rays leads to inconsistent reconstructions. Therefore, we propose to couple camera ray and geometry predictions using a rendering-based consistency constraint. This encourages structurally coherent prediction of cameras and geometry, while also boosting camera estimation accuracy. 3DiffGS achieves state-of-the-art sparse-view camera pose estimation results among models trained without ground-truth 3D geometry, while utilizing only half the model size of RayDiffusion and demonstrating superior cross-category generalization.
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+        <img src='./static/images/method.png'/>
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+          We jointly denoise rays and regress 3D Gaussians using the same features. We also incorporate Rendering Guided Photometric Supervision (RGPS), which encourages predicted cameras to be photometrically consistent with the predicted Gaussians.
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="is-centered has-text-centered">
+    <h2 class="title is-3">Results</h2>
+    <br/>
+  </div>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-4">Quantitative</h2>
+          <p>
+            3DiffGS generalizes to unseen categories better than RayDiffusion, using just half the parameter count. It performs much better than a joint rays+3DGS regression baseline across camera pose, photometric consistency, and geometry accuracy.
+          </p>
+          <img src='./static/images/quant_1.png'>
+        </div>
+      </div>
+    </div>
+    <br/>
+
+    <div class="columns is-centered">
+      <div class="column">
+      <div class="column">
+        <h2 class="title is-4">Qualitative</h2>
+        <div class="columns is-centered">
+          <div class="column content">
+            <p>
+              3DiffGS is able to predict accurate camera poses in challenging object-centric scenarios. 3D geometry supervised models (VGGT, DiffusionSfM, AnySplat) perform better in both pose and geometry prediction.
+            </p>
+            <img src='./static/images/qual_1.png'>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+
+  <div class="is-centered has-text-centered">
+    <h2 class="title is-3">Ablations</h2>
+    <br/>
+  </div>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-4">Quantitative</h2>
+          <p>
+            RGPS, our training-time strategy for better photometric consistency, not only aligns the predicted cameras and Gaussians better (PSNR), but also results in much more accurate pose prediction. Novel view and mean regularization losses encourage much better geometry by constraining Gaussians better and allocating them better across the observed views. 
+          </p>
+          <img src='./static/images/quant_abl.png'>
+        </div>
+      </div>
+
+      <div class="column">
+        <h2 class="title is-4">Qualitative</h2>
+        <div class="columns is-centered">
+          <div class="column content">
+            <p>
+              Without novel view and mean regularization losses, predicted geometry has visible holes and floaters. With RGPS, we observe via RGB renders from predicted cameras that cameras and Gaussians are better aligned.
+            </p>
+            <img src='./static/images/qual_abl.png'>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-4">Limitations</h2>
+          <p>
+            <ul>
+              <li>There is a significant pose and geometry accuracy gap compared to geometry supervised models such as VGGT and DiffusionSfM.</li>
+              <li>Relying on photometric supervision alone results in overly smooth and blurry reconstruction, especially in more challenging settings (refractive materials, extreme baselines).</li>
+              <li>Our experiments are exclusively on object centric settings.</li>
+            </ul>
+              
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+
+  <div class="is-centered has-text-centered">
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/MXjo0Qu_qbE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX (coming soon)</h2>
+<!--
+    <pre><code>@inproceedings{bhusal20263diffgs,
+  author    = {Bhusal, Abhigyan and Koju, Bishad and Paudel, Danda Pani and Rameau, François},
+  title     = {3DiffGS: 3D Gaussian Splats from Unposed Images using Ray Diffusion},
+  booktitle = {Proceedings of the 37th British Machine Vision Conference (BMVC)},
+  year      = {2026},
+  address   = {Lancaster, UK},
+  publisher = {British Machine Vision Association}
+}
+</code></pre>-->
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/documents/paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/abhigyan7" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website template borrowed from <a href="https://nerfies.github.io">Nerfies</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
